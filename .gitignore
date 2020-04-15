@@ -1,3 +1,7 @@
+#added
+Debug/
+OpenGL/Debug
+
 # Prerequisites
 *.d
 
