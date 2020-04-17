@@ -1,6 +1,19 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <fstream>
+#include <string>
+static std::string ParseShader(const std::string& filepath) {
+	std::ifstream stream(filepath);
+	std::string line;
+	std::string result;
+	while (getline(stream, line)) {
+		result.append(line);
+		result.append("\n");
+	}
+	return result;
+}
+
 
 static unsigned int CompileShader(unsigned int type, const std::string& source) {
 	unsigned int id = glCreateShader(type);
@@ -38,7 +51,7 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 	return program;
 }
 
-int main(void)
+int draw_triangle(void)
 {
 	GLFWwindow* window;
 
@@ -75,28 +88,8 @@ int main(void)
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);
-
-	std::string vertexShader =
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) in vec4 position;\n"
-		"\n"
-		"void main(){\n"
-		"\n"
-		"gl_Position = position;\n"
-		"}\n"
-		"\n";
-
-	std::string fragmentShader =
-		"#version 330 core\n"
-		"\n"
-		" out vec4 color;\n"
-		"\n"
-		"void main(){\n"
-		"\n"
-		"	color = vec4(1.0, 0.0, 0.0, 1.0);\n"
-		"}\n"
-		"\n";
+	std::string vertexShader = ParseShader("res/shaders/vertex.shader");
+	std::string fragmentShader = ParseShader("res/shaders/fragment.shader");
 
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
