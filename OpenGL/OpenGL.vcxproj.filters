@@ -30,9 +30,13 @@
     <ClCompile Include="src\Uniform.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\VertexArrays.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragment.shader" />
     <None Include="res\shaders\vertex.shader" />
+    <None Include="res\shaders\fragment1.shader" />
   </ItemGroup>
 </Project>

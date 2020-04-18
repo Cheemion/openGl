@@ -136,8 +136,10 @@
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Uniform.cpp" />
+    <ClCompile Include="src\VertexArrays.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\fragment1.shader" />
     <None Include="res\shaders\vertex.shader" />
     <None Include="res\shaders\fragment.shader" />
   </ItemGroup>

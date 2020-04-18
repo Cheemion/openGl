@@ -92,7 +92,7 @@ int draw_square(void)
 	unsigned int buffer;
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 2 * 6 * sizeof(float), position, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(float), position, GL_STATIC_DRAW);
 
 	//这2句的0是同一个id
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
@@ -107,7 +107,7 @@ int draw_square(void)
 
 
 	std::string vertexShader = ParseShader("res/shaders/vertex.shader");
-	std::string fragmentShader = ParseShader("res/shaders/fragment.shader");
+	std::string fragmentShader = ParseShader("res/shaders/fragment1.shader");
 
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
 	glUseProgram(shader);
