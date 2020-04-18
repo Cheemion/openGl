@@ -131,8 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ErrorDealing.cpp" />
+    <ClCompile Include="src\Square.cpp" />
     <ClCompile Include="src\Triangle.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Uniform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\vertex.shader" />
