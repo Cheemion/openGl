@@ -6,22 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
-#define ASSERT(x) if (!(x)) __debugbreak();
-#define GLCall(x) GLClearError();x;ASSERT(GLLogCall(#x, __FILE__, __LINE__))
-static void GLClearError() {
-	//clear error
-	while (glGetError() != GL_NO_ERROR);
-}
-
-static bool GLLogCall(const char* function, const char* file, int line) {
-	while (GLenum error = glGetError()) {
-		std::cout << "OpenGl Error:" << error << function << file << line << std::endl;
-		return false;
-	}
-	return true;
-}
-
+#include "Renderer.h"
 
 static std::string ParseShader(const std::string& filepath) {
 	std::ifstream stream(filepath);
@@ -71,7 +56,7 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 	return program;
 }
 
-int using_vertex_array(void)
+int main(void)
 {
 	GLFWwindow* window;
 
@@ -118,10 +103,7 @@ int using_vertex_array(void)
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 	//生成vbo
-	unsigned int buffer;
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, 2 * 4 * sizeof(float), position, GL_STATIC_DRAW);
+
 
 	//vao的第【0】个属性的layout如下，并且vao绑定当前的buffer（vbo）
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
@@ -154,8 +136,8 @@ int using_vertex_array(void)
 
 	glBindVertexArray(0);
 	glUseProgram(0);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
 	float r = 0.0f;
@@ -165,7 +147,7 @@ int using_vertex_array(void)
 	{
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shader); 
+		glUseProgram(shader);
 
 		glBindVertexArray(vao);
 
