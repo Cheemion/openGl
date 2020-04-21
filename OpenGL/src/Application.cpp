@@ -1,12 +1,12 @@
-// 从 cpu 到 gpu 
-// 必须要在draw之前设置好
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include "Renderer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
 
 static std::string ParseShader(const std::string& filepath) {
 	std::ifstream stream(filepath);
@@ -99,69 +99,54 @@ int main(void)
 		2, 3, 0   //第二点
 	};
 	//生产vao
-	unsigned int vao;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	VertexArray va;
+	va.Bind();
+
 	//生成vbo
-
-
-	//vao的第【0】个属性的layout如下，并且vao绑定当前的buffer（vbo）
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
-
-	unsigned int ibo; //index buffer object
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW);
+	VertexBuffer vb(position, 4 * 2 * sizeof(float));
+	VertexBufferLayout layout;
+	layout.Push<float>(2);
+	va.AddBuffer(vb, layout);
+	//ibo
+	IndexBuffer ib(indices, 6);
+	ib.Bind();
+	//到此vao完成组装
+	va.Unbind();
+	vb.Unbind();
+	ib.Unbind();
 
 
 	std::string vertexShader = ParseShader("res/shaders/vertex.shader");
 	std::string fragmentShader = ParseShader("res/shaders/fragment.shader");
-
 	unsigned int shader = CreateShader(vertexShader, fragmentShader);
-	glUseProgram(shader);
-	//not used that buffer anymore
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	int location = glGetUniformLocation(shader, "u_Color");
 	if (location == -1) {
 		std::cout << "Error" << std::endl;
 	}
 	glUniform4f(location, 0.2f, 0.1f, 0.1f, 1.0f);
-
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0); //每次渲染如果是不同的对象得设置不同的值，
-
-
-	glBindVertexArray(0);
-	glUseProgram(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
+	
 	float r = 0.0f;
-	float increment = 0.05;
+	float increment = 0.05f;
 	/* Loop until the user closes the window */
+
+
+	va.Bind();
+	glUseProgram(shader);
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
-		glUseProgram(shader);
-
-		glBindVertexArray(vao);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
 		glUniform4f(location, r, 0.1f, 0.1f, 1.0f);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
 		if (r > 1.0f) {
 			increment = -0.05f;
 		}
 		else if (r < 0.0f) {
 			increment = 0.05f;
 		}
-
 		r = r + increment;
 
 		/* Swap front and back buffers */
